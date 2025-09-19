@@ -1,11 +1,11 @@
 import os
 import sys
-from pathlib import Path 
+import shutil
 import argparse
 import datetime
+from pathlib import Path
+from pprint import pprint
 from collections import defaultdict
-import shutil
-
 
 pars = argparse.ArgumentParser() # inbuilt function of argparse to parse the argument given in the cli
 pars.add_argument("path", type=str) # adding a path argument to specifiy which directory to use for scanning 
@@ -15,14 +15,11 @@ print("Scanning Directory", target_path)
 
 file_groups = defaultdict(list) # Create a dictionary with default list for grouping 
 
-
-
-
 Ancient_artifacts= [] # here we gotta store all the old files path
 
 c_time = datetime.datetime.now() # storing current time 
 
-one_year_s = 365 * 24 * 60 * 60 # formula is year= (days * 24hrs * minuts * seconds)
+one_year_s = 365.25 * 24 * 60 * 60 # formula is year= (days * 24hrs * minuts * seconds)
 
 for root, dirs, files, in os.walk(target_path): # this will scan through all the directory and sub directory starting at target_path
     for file in files: # iterates through all the files found in the directories 
@@ -44,14 +41,14 @@ print("Ancient Artifacts (>1 year old) :")
 
 # Group the files by extension
 for file_path in Ancient_artifacts:
-    ext= file_path.suffix.lower() # get the lowercase of the extension 
+    ext = file_path.suffix.lower() # get the lowercase of the extension 
     file_groups[ext].append(file_path) # appending to our dict
 
 # printing Summaries of categories and counts 
 print("\n Ancient Artifacts Categorized ")
 for i, (ext, files) in enumerate(file_groups.items(), start=1): # The enumerate() function wraps the iterable, adding an automatic counter. It returns tuples containing an index (starting at 1 here) together with each (key, value) pair.
     # removing the . 
-    display_ext = ext[1:] if ext else 'else no extension '
+    display_ext = ext[1:] if ext else 'no extension'
     print(f"({i}) {display_ext}s (found {len(files)})")
 
 # For user to navigate through the catrgories 
@@ -96,8 +93,8 @@ while True:
     if not file_choice.isdigit():
         print("Invalid input. Please enter a number. ")
         continue
-
-    file_choice= int(file_choice)
+    
+    file_choice = int(file_choice)
 
     # Exiting the operation if that's the choice
     if file_choice == 0:
@@ -126,14 +123,14 @@ while True:
         # Read Action 
         if action == 'a':
             try:
-                # open and read first 1000 character of the file to display 
+                # open and read first 10000 character of the file to display 
                 with open(chosen_file, 'r', encoding='utf-8') as f:
                     print("\n ---- File content Start -------")
-                    print(f.read(10000))
+                    pprint(f.read(10000))
                     print("\n ------ File Content End ----------\n")
             except Exception as e:
                 print(f"Error opening the file: {e}")
-            
+
         # Delete Option 
         elif action == 'b':
             confirm= input(f"\nAre You sure you wanna delete this file {chosen_file}? [y/n]: ").strip().lower()
@@ -147,8 +144,8 @@ while True:
                     print(f"Error {e}")
             else:
                 print("\nDeletion of the File Cancelled")
-            
-        # Archive Option 
+
+        # Archive Option
         elif action == 'c':
             try:
                 # moving the file to the archive directory 
@@ -159,12 +156,10 @@ while True:
                 break  # Exit inner loop as file moved
             except Exception as e:
                 print(f"\nError Archiving {chosen_file}: {e}")
-        
         # Ignoring and exiting the action 
         elif action == 'd':
             print("\nIgnore Selected Exiting File Operation Interaction\n ")
             break
-
         else:
             print("Invalid Action. Choose from the options above dumbfuck ")
 

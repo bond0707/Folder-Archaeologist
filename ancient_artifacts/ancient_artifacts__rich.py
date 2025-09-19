@@ -2,19 +2,18 @@
 
 import os
 import sys
-from pathlib import Path 
+import shutil
 import argparse
 import datetime
-from collections import defaultdict
-import shutil
+from pathlib import Path
 from rich.table import Table
 from rich.console import Console
 from rich import print as rprint
+from collections import defaultdict
 
 
 # Create a console instance for rich output
 console = Console()
-
 
 def show_data(title: str, column_list: list[str], data_list: list[tuple]):
     """
@@ -39,7 +38,7 @@ def show_data(title: str, column_list: list[str], data_list: list[tuple]):
 
 
 pars = argparse.ArgumentParser()  # inbuilt function of argparse to parse the argument given in the cli
-pars.add_argument("path", type=str)  # adding a path argument to specifiy which directory to use for scanning 
+pars.add_argument("path", type=str, default=os.path.dirname(__file__), nargs="+")  # adding a path argument to specifiy which directory to use for scanning 
 
 target_path = pars.parse_args().path
 rprint(f"[bold green]Scanning Directory:[/bold green] {target_path}")
@@ -50,12 +49,12 @@ Ancient_artifacts = []  # here we gotta store all the old files path
 
 c_time = datetime.datetime.now()  # storing current time 
 
-one_year_s = 365 * 24 * 60 * 60  # formula is year= (days * 24hrs * minuts * seconds)
+one_year_s = 365 * 24 * 60 * 60  # formula is year = (days * 24hrs * minuts * seconds)
 
 for root, dirs, files in os.walk(target_path):  # this will scan through all the directory and sub directory starting at target_path
     for file in files:  # iterates through all the files found in the directories 
         file_path = Path(root) / file  # joining the whole file path root+ current file 
-        
+
         mod_time = os.path.getmtime(file_path)  # get the last modification time of the files in seconds 
 
         file_age = c_time.timestamp() - mod_time  # caclulating the age of the files in seconds 
@@ -106,6 +105,7 @@ c_time2 = datetime.datetime.now().timestamp()
 archive_dir = Path.home() / "Archive"
 archive_dir.mkdir(exist_ok=True) 
 
+Ancient_artifacts.sort()
 # The iterative interactive loop for the final boom bang 
 while True:
     # Prepare data for rich table display
