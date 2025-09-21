@@ -134,6 +134,6 @@ Thank you to all contributors, testers, and the open source community.
 
 
 _Turn your digital chaos into organized discovery with Folder Archaeologist!_
-```
+
 
 
