@@ -1,11 +1,12 @@
 # Timepass W with @Koffandaff begins....
 # sure lol
 # ig this is it broo, it's done
+# Ts is fire ngl
 
 from rich.console import Console
-from features import file_operations_menu
-from categories import show_categories_menu
-from utilities import parse_directory_path, clear_screen
+from .features import file_operations_menu
+from .categories import show_categories_menu
+from .utilities import parse_directory_path, clear_screen
 
 console = Console()
 

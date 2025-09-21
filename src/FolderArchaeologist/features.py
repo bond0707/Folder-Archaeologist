@@ -1,6 +1,5 @@
 import os
 import shutil
-import zipfile
 import datetime
 import platform
 import mimetypes
@@ -8,7 +7,7 @@ import subprocess
 from pathlib import Path
 from rich.console import Console
 from rich.progress import Progress
-from utilities import format_size, clear_screen, show_data
+from .utilities import format_size, clear_screen, show_data
 
 console = Console()
 
@@ -130,13 +129,13 @@ def get_files_details(file_paths):
         console.print("[yellow]No files to get details for.[/yellow]")
         return
 
-    columns = ["#", "Filename", "Size", "Created", "Modified", "MIME Type"]
+    columns = ["#", "Filename", "Size", "Created", "Modified", "MIME Type", "Full Path"]
     rows = []
     for idx, file_path in enumerate(file_paths, 1):
         file_path = Path(file_path)
         try:
             if not file_path.exists():
-                rows.append([str(idx), file_path.name, "[red]File not found[/red]", "-", "-", "-"])
+                rows.append([str(idx), file_path.name, "[red]File not found[/red]", "-", "-", "-", str(file_path)])
                 continue
             
             stat_info = file_path.stat()
@@ -151,33 +150,72 @@ def get_files_details(file_paths):
                 format_size(size),
                 datetime.datetime.fromtimestamp(ctime).strftime('%Y-%m-%d %H:%M:%S'),
                 datetime.datetime.fromtimestamp(mtime).strftime('%Y-%m-%d %H:%M:%S'),
-                mime_type if mime_type else "unknown"
+                mime_type if mime_type else "unknown",
+                str(file_path.resolve())  # full absolute path
             ]
             rows.append(row_data)
         except (FileNotFoundError, PermissionError) as e:
-            rows.append([str(idx), file_path.name, f"[red]Error: {e}[/red]", "-", "-", "-"])
-        
+            rows.append([str(idx), file_path.name, f"[red]Error: {e}[/red]", "-", "-", "-", str(file_path)])
+
     show_data("File Details", columns, rows)
-    # 5. Add pause after showing details
     input("\nPress Enter to return to the selection menu...")
 
 
-def archive_files(file_list, archive_name):
-    """Archives all specified files into a single zip file using Python's zipfile module."""
+
+def archive_files(file_list, archive_name=None):
+    """
+    Archives all specified files into a single zip file using Python's zipfile module.
+    Prompts user for a destination directory (creates it if missing),
+    uses home directory as default if no input given,
+    then asks for archive name and shows final zip full path.
+    """
+    from os.path import expanduser
+    import zipfile
+
     clear_screen()
+
+    # Ask user for destination directory
+    dest_dir = input("Enter destination directory for archive (leave empty for home directory): ").strip()
+    if not dest_dir:
+        dest_dir = expanduser("~")  # User home directory
+    dest_path = Path(dest_dir)
+    
+    # Create directory if it doesn't exist
+    if not dest_path.exists():
+        try:
+            dest_path.mkdir(parents=True, exist_ok=True)
+            console.print(f"[green]Created directory: {dest_path}[/green]")
+        except Exception as e:
+            console.print(f"[red]Error creating directory: {e}[/red]")
+            return
+    
+    # Ask user for archive name if not provided
+    if not archive_name:
+        archive_name = input("Enter archive zip filename (without extension): ").strip()
+        if not archive_name:
+            console.print("[yellow]No archive name provided. Using default 'archive'.[/yellow]")
+            archive_name = "archive"
+    # Ensure it ends with .zip
+    if not archive_name.endswith(".zip"):
+        archive_name += ".zip"
+
+    # Full archive path
+    archive_full_path = dest_path / archive_name
+
     with Progress() as progress:
         task = progress.add_task("[red]Compressing files...", total=len(file_list))
         try:
-            with zipfile.ZipFile(archive_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            with zipfile.ZipFile(archive_full_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 for file_path in file_list:
                     path_obj = Path(file_path)
                     zipf.write(path_obj, path_obj.name)
                     progress.update(task, advance=1, description=f"[cyan]Adding {path_obj.name}")
             progress.update(task, completed=True, description="[green]Archive created successfully!")
-            console.print(f"Files archived to: [bold]{archive_name}[/bold]")
+            console.print(f"Files archived to: [bold]{archive_full_path.resolve()}[/bold]")
         except Exception as e:
             progress.update(task, completed=True, description="[bold red]Error creating archive.[/bold red]")
             console.print(f"[red]Error creating archive: {e}[/red]")
+
 
 def file_operations_menu(file_paths):
     """

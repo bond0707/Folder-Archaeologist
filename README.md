@@ -1,11 +1,6 @@
 # Folder Archaeologist
-<img width="500" height="300" alt="image" src="https://github.com/user-attachments/assets/f3cd6a79-8272-4b7b-b67c-b8ef69363fe1" />
 
-
-
-
-
-> 🏺 Uncover, analyze, and manage your digital artifacts with powerful, interactive CLI tools.
+<img width="902" height="385" alt="image" src="https://github.com/user-attachments/assets/3b7ecf12-28ee-446a-85e7-45382c48e82a" />
 
 ---
 
@@ -30,7 +25,7 @@
 
 ## Installation
 
-Install via pip (to be published):
+Install via pip:
 
 ```
 pip install folderarchaeologist
@@ -76,34 +71,35 @@ Select a directory, pick your exploration mode, and follow the prompts to scan, 
 4. **Export, archive, or perform next actions**—with confidence.
 
 ---
+
 ## Screenshots
 
 <!-- Paste screenshot or demo GIFs here after using the tool in the CLI -->
+
 ### Categories Menu
 
 <img width="902" height="385" alt="image" src="https://github.com/user-attachments/assets/3b7ecf12-28ee-446a-85e7-45382c48e82a" />
 
 ---
 
-### Files Operation Menu
+### File Operations Menu
 
 <img width="760" height="408" alt="image" src="https://github.com/user-attachments/assets/962cea99-bbae-45ca-9776-dcab5fbf229b" />
 
-
-
 ---
+
 ## Development
 
-- Written in Python 3.8+
-- Modular, extensible code structure (`main.py`, `categories.py`, `features.py`, `utilities.py`)
-- Clean separation of UI and data logic
-- Powered by [`rich`](https://github.com/Textualize/rich) for all terminal visualization
+- Completely written in Python.
+- Modular, extensible code structure (`main.py`, `categories.py`, `features.py`, `utilities.py`).
+- Clean separation of UI and data logic.
+- Powered by [`rich`](https://github.com/Textualize/rich) for all terminal visualization.
 
 ---
 
-## Contributing
+## Contributions
 
-Contributions and suggestions are welcome!  
+Contributions and suggestions are welcome!
 Please open issues or submit pull requests via GitHub. See the [issues page](https://github.com/koffandaff/folderarchaeologist/issues) for outstanding tasks.
 
 ---
@@ -116,24 +112,11 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Authors & Contributors
 
-- Dhruvil (`koffandaff`)  
-- Kirtan (`bond0707`)  
+This project is made by:
 
-Thank you to all contributors, testers, and the open source community.
+* Dhruvil (`koffandaff`)
+* Kirtan   (`bond0707`)
 
----
-
-## Acknowledgements
-
-
-- Inspired by the needs of digital “archaeologists” tackling messy data
-- Special thanks to the maintainers of the `rich` library
+It is submitted in "for the love of code 2025" hackathon.
 
 ---
-
-
-
-_Turn your digital chaos into organized discovery with Folder Archaeologist!_
-
-
-

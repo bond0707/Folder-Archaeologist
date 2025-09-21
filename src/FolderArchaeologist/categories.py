@@ -2,10 +2,10 @@ import re
 from pathlib import Path
 from rich.text import Text
 from rich.console import Console
+from rich.progress import Progress
 from datetime import datetime as dt
 from collections import defaultdict
-from utilities import format_size, clear_screen, show_data
-from rich.progress import Progress
+from .utilities import format_size, clear_screen, show_data
 
 
 console = Console()
