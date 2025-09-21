@@ -43,16 +43,18 @@ pip install -r requirements.txt
 
 ## Quick Start
 
-Simply run from your terminal:
+Simply run from your terminal using the following command.
 
-```
-python main.py directory\
+```powershell
+excavate [dirpath]
 ```
 
-Or, if installed as a package:
+**Note:** The `excavate` command takes a directory path as a keyword arguement. If no path is given then is defaults to `Path.home()`
 
-```
-folderarchaeologist directory\
+Example:
+
+```powershell
+excavate "C:\Me\Cluttered Folder"
 ```
 
 Select a directory, pick your exploration mode, and follow the prompts to scan, filter, and interact with your files—all in style.
